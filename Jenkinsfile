@@ -1,22 +1,27 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
+    stages {
+        stage('Checkout') {
+            steps {
+                git url: 'https://github.com/Nikhilmvk/webapp.git', branch: 'main'
+            }
+        }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t webapplication:latest .'
-      }
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t webapplication:latest .'
+            }
+        }
+
+        stage('Run Web App') {
+            steps {
+                sh '''
+                docker stop webapplication || true
+                docker rm webapplication || true
+                docker run -d --name webapplication -p 8080:80 webapplication:latest
+                '''
+            }
+        }
     }
-
-    stage('Deploy Web App') {
-      steps {
-        sh '''
-          docker stop webapp || true
-          docker rm webapp || true
-          docker run -d --name webapp -p 87:80 webapp:latest
-        '''
-      }
-    }
-  }
 }
