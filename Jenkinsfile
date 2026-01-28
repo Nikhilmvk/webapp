@@ -3,16 +3,9 @@ pipeline {
 
   stages {
 
-    stage('Checkout') {
-      steps {
-        git branch: 'main',
-            url: 'https://github.com/your-org/webapp.git'
-      }
-    }
-
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t webapp:latest .'
+        sh 'docker build -t webapplication:latest .'
       }
     }
 
@@ -21,14 +14,9 @@ pipeline {
         sh '''
           docker stop webapp || true
           docker rm webapp || true
-
-          docker run -d \
-            --name webapplication \
-            -p 87:80 \
-            webapp:latest
+          docker run -d --name webapp -p 87:80 webapp:latest
         '''
       }
     }
   }
 }
-
