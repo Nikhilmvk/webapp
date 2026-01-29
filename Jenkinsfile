@@ -19,7 +19,7 @@ pipeline {
                 sh '''
                 docker stop webapplication || true
                 docker rm webapplication || true
-                docker run -d --name webappss -p 8060:80 webapplication:latest
+                docker run -d --name webpage -p 8060:80 webapplication:latest
                 '''
             }
         }
